@@ -1,0 +1,63 @@
+.multi-item-carousel {
+  overflow: hidden;
+}
+
+.multi-item-carousel .carousel-control-prev,
+.multi-item-carousel .carousel-control-next {
+  background: rgba(112, 112, 112, 0.5);
+  width: 5%;
+}
+
+.multi-item-carousel .carousel-inner {
+  width: 345%;
+  left: -80%;
+  padding-top: 50px;
+  background-color: lightsteelblue;
+}
+
+.carousel-inner .carousel-item-right.active,
+.carousel-inner .carousel-item-next {
+  transform: translateX(75%);
+}
+
+.carousel-inner .carousel-item-left.active,
+.carousel-inner .carousel-item-prev {
+  transform: translateX(-75%)
+}
+
+.carousel-inner .carousel-item-right,
+.carousel-inner .carousel-item-left {
+  transform: translateX(0);
+}
+
+.item__third {
+  float: left;
+  width: 25%;
+  background-size: cover;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  padding-left: 10px;
+}
+
+.card-text{
+  align-content: center;
+}
+
+.card-img {
+  width: 10%;
+}
+
+#send-header
+{
+  background-color: #B341FF;
+}
+
+#withdraw-header
+{
+  background-color: #4B70FF
+}
+
+#newContract-header
+{
+  background-color: #4BFFFF;
+}
