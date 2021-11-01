@@ -6,6 +6,7 @@
     <title>BTH745-Adv. Prototype</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css'>
     <link rel="stylesheet" href="css/style.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -37,6 +38,10 @@
                 <li data-target="#carousel-1" data-slide-to="1"></li>
                 <li data-target="#carousel-1" data-slide-to="2"></li>
             </ol>
+
+
+
+
             <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active" id="send">
                     <div class="item__third">
@@ -56,15 +61,21 @@
                                         <input type="text" class="form-control" id="toSend"
                                             placeholder="Enter Ethereum Address">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="toSend">Amount</label>
+                                        <input type="number" class="form-control" 
+                                            placeholder="Enter Amount">
+                                    </div>
                                     <small class="form-text text-muted QRCode">
                                         <img src="images/qr-code-scan.png" alt="QR Icon">
                                         OR SCAN QR CODE</small>
-                                    <button type="submit" class="btn btn-primary mt-2">Next</button>
+                                    <button type="button" id="b1" class="btn btn-primary mt-2">Send</button>                                    
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="carousel-item" id="withdraw">
                     <div class="item__third">
                         <div class="card">
@@ -77,11 +88,27 @@
                                         <label for="fromWithdraw">From</label>
                                         <input type="text" class="form-control" id="fromWithdraw"
                                             aria-describedby="EthereumAddressHelp" placeholder="Enter Ethereum Address">
+                                            
                                     </div>
+                                    <label for="fromWithdraw">Amount</label>
+                                    <input type="number" class="form-control"
+                                            aria-describedby="EthereumAddressHelp" placeholder="Enter Amount">
                                     <small class="form-text text-muted QRCode">
                                         <img src="images/qr-code-scan.png" alt="QR Icon">
                                         OR SCAN QR CODE</small>
-                                    <button type="submit" class="btn btn-primary mt-2">Next</button>
+                                        <button type="button" id="b2" class="btn btn-primary mt-2">Send</button>
+                                        <script>
+                                            document.getElementById("b2").addEventListener("click", function () {
+                                                Swal.fire({
+                                                    position: 'center',
+                                                    icon: 'success',
+                                                    title: 'Withdrawal Successful',
+                                                    text: "Updated Balance: 500 ETH",                                                
+                                                    showConfirmButton: true,
+                                                    
+                                                })
+                                            });
+                                        </script>                                       
                                 </form>
                             </div>
                         </div>
@@ -105,10 +132,26 @@
                                         <input type="text" class="form-control" id="newContractSpender"
                                             placeholder="Enter Ethereum Address">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="newContractSpender">Contract Amount</label>
+                                        <input type="number" class="form-control" 
+                                            placeholder="Enter Amount">
+                                    </div>
                                     <small class="form-text text-muted QRCode">
                                         <img src="images/qr-code-scan.png" alt="QR Icon">
                                         OR SCAN QR CODE</small>
-                                    <button type="submit" class="btn btn-primary mt-2">Next</button>
+                                        <button type="button" id="b3" class="btn btn-primary mt-2">Send</button>
+                                        <script>
+                                            document.getElementById("b3").addEventListener("click", function () {
+                                                Swal.fire({
+                                                    position: 'center',
+                                                    icon: 'success',
+                                                    title: 'Contract has been sent',                                                                                                    
+                                                    showConfirmButton: true,
+                                                    
+                                                })
+                                            });
+                                        </script>       
                                 </form>
                             </div>
                         </div>

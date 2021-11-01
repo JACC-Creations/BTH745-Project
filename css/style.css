@@ -9,6 +9,8 @@
 }
 
 .multi-item-carousel .carousel-inner {
+  width: 345%;
+  left: -80%;
   padding-top: 50px;
   background-color: lightsteelblue;
 }
@@ -29,8 +31,8 @@
 }
 
 .item__third {
-  margin: 0 auto;
-  width: 80%;
+  float: left;
+  width: 25%;
   background-size: cover;
   padding-top: 20px;
   padding-bottom: 40px;
@@ -59,3 +61,53 @@
 {
   background-color: #4BFFFF;
 }
+
+
+
+/* 
+
+#popUpBox{  
+   width: 500px;
+   height: 400px;
+   overflow: hidden;
+   background: white;
+   border-radius: 10px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);   
+   padding-top: 90px;
+   text-align: center;
+   display: none;  
+  }
+
+  #closeModal{       
+    padding-top: 10%;
+  }
+
+.pop1{
+  box-shadow: 0 0 20px #B341FF;
+}
+
+#popUpBox2{  
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  background: white;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);   
+  padding-top: 90px;
+  text-align: center;
+  display: none;  
+ }
+
+ #closeModal2{       
+   padding-top: 10%;
+ }
+
+.pop2{
+  box-shadow: 0 0 20px #4B70FF;
+} */
