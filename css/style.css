@@ -9,8 +9,7 @@
 }
 
 .multi-item-carousel .carousel-inner {
-  width: 345%;
-  left: -80%;
+
   padding-top: 50px;
   background-color: lightsteelblue;
 }
@@ -31,8 +30,8 @@
 }
 
 .item__third {
-  float: left;
-  width: 25%;
+  margin: 0 auto;
+  width: 80%;
   background-size: cover;
   padding-top: 20px;
   padding-bottom: 40px;
