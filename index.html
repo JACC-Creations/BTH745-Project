@@ -13,17 +13,96 @@
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">BTH745-Group 2</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item px-2">
-                            <a href="https://etherscan.io/login" class="btn btn-primary">Metis Login</a>
+                            <button id="login" class="btn btn-primary">Login</button>
+                            <button id="logout" class="btn btn-primary" hidden>Logout</button>
+                            <script>
+                                var loginFunc = function () {
+                                    Swal.fire({
+                                        title: 'Login Form',
+                                        html:
+                                            '<input type="text" id="login" class="swal2-input" placeholder="Username">' +
+                                            '<input type="password" id="password" class="swal2-input" placeholder="Password">',
+                                        confirmButtonText: 'Sign in',
+                                        focusConfirm: false,
+                                        preConfirm: () => {
+                                            const login = Swal.getPopup().querySelector('#login').value
+                                            const password = Swal.getPopup().querySelector('#password').value
+                                            if (!login || !password) {
+                                                Swal.showValidationMessage(`Please enter login and password`)
+                                            }
+                                            return { login: login, password: password }
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            if (result.value.login == username && result.value.password == password) {
+                                                login = true;
+                                                document.getElementById("fromSend").value = address;
+
+                                                var els = document.getElementsByName("fromWithdraw");
+                                                for (i = 0; i < els.length; i++) {
+                                                    els[i].value = address;
+                                                }
+
+                                                var els = document.getElementsByName("newContractProvider");
+                                                for (i = 0; i < els.length; i++) {
+                                                    els[i].value = address;
+                                                }
+
+                                                document.getElementById("login").hidden = true;
+                                                document.getElementById("logout").hidden = false;
+                                                document.getElementById("balance").hidden = false;
+                                                document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
+
+                                                Swal.fire("Success", "Login Successful!");
+                                            }
+                                            else {
+                                                Swal.fire("Error", "Login Failed!");
+                                            }
+                                        }
+                                    })
+                                }
+
+                                var logoutFunc = function () {
+                                    login = false;
+
+                                    document.getElementById("fromSend").value = "";
+
+                                    var els = document.getElementsByName("fromWithdraw");
+                                    for (i = 0; i < els.length; i++) {
+                                        els[i].value = "";
+                                    }
+
+                                    var els = document.getElementsByName("newContractProvider");
+                                    for (i = 0; i < els.length; i++) {
+                                        els[i].value = "";
+                                    }
+
+                                    document.getElementById("logout").hidden = true;
+                                    document.getElementById("login").hidden = false;
+                                    document.getElementById("balance").hidden = true;
+                                    document.getElementById("balance").innerText = ``;
+
+                                    Swal.fire("Success", "Logged Out!");
+                                }
+
+                                document.getElementById("login").addEventListener("click", loginFunc);
+                                document.getElementById("logout").addEventListener("click", logoutFunc);
+                            </script>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a href="https://etherscan.io/login" class="btn btn-primary">Metis</a>
                         </li>
                         <li class="nav-item px-2">
                             <a href="https://metamask.io/" class="btn btn-primary">Activate Metamask</a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <h2 id="balance" class="navbar-brand" hidden></h2>
                         </li>
                     </ul>
                 </div>
@@ -38,9 +117,6 @@
                 <li data-target="#carousel-1" data-slide-to="2"></li>
             </ol>
 
-
-
-
             <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active" id="send">
                     <div class="item__third">
@@ -53,7 +129,7 @@
                                     <div class="form-group">
                                         <label for="fromSend">From</label>
                                         <input type="text" class="form-control" id="fromSend"
-                                            aria-describedby="EthereumAddressHelp" placeholder="Enter Ethereum Address">
+                                            placeholder="Enter Ethereum Address">
                                     </div>
                                     <div class="form-group">
                                         <label for="toSend">To</label>
@@ -62,13 +138,69 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="toSend">Amount</label>
-                                        <input type="number" class="form-control" 
+                                        <input id="sendAmount" type="number" class="form-control"
                                             placeholder="Enter Amount">
                                     </div>
                                     <small class="form-text text-muted QRCode">
                                         <img src="images/qr-code-scan.png" alt="QR Icon">
                                         OR SCAN QR CODE</small>
-                                    <button type="button" id="b1" class="btn btn-primary mt-2">Send</button>                                    
+                                    <button type="button" id="b1" class="btn btn-primary mt-2">Send</button>
+                                    <script>
+                                        document.getElementById("b1").addEventListener("click", function () {
+                                            if (document.getElementById("fromSend").value == "") {
+                                                Swal.fire("Cancelled", "Invalid Sender Address!");
+                                            }
+                                            else if (document.getElementById("toSend").value == "") {
+                                                Swal.fire("Cancelled", "Invalid Receiver Address!");
+                                            }
+                                            else if (document.getElementById("sendAmount").value == 0) {
+                                                Swal.fire("Cancelled", "Please enter a valid amount!");
+                                            }
+                                            else {
+                                                Swal.fire({
+                                                    title: "Are you sure you want to make this transfer?",
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonText: "Yes",
+                                                    confirmButtonColor: "#3da614",
+                                                    cancelButtonText: "No",
+                                                    cancelButtonColor: "#d33",
+                                                    reverseButtons: false,
+                                                })
+                                                    .then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            if (login) {
+                                                                if (accountBalance - document.getElementById("sendAmount").value < 0) {
+                                                                    Swal.fire("Cancelled", "Insufficient funds!");
+                                                                }
+                                                                else {
+                                                                    Swal.fire(
+                                                                        "Success!",
+                                                                        "Your new Balance: " + (accountBalance -= document.getElementById("sendAmount").value) + " ETH",
+                                                                        "success"
+                                                                    );
+                                                                    document.getElementById("toSend").value = "";
+                                                                    document.getElementById("fromSend").value = "";
+                                                                    document.getElementById("sendAmount").value = "";
+                                                                    document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
+                                                                }
+                                                            }
+                                                            else {
+                                                                Swal.fire("Success!");
+                                                                document.getElementById("toSend").value = "";
+                                                                document.getElementById("fromSend").value = "";
+                                                                document.getElementById("sendAmount").value = "";
+                                                            }
+                                                        } else if (
+                                                            /* Read more about handling dismissals below */
+                                                            result.dismiss === Swal.DismissReason.cancel
+                                                        ) {
+                                                            Swal.fire("Cancelled", "Transaction cancelled");
+                                                        }
+                                                    });
+                                            }
+                                        });
+                                    </script>
                                 </form>
                             </div>
                         </div>
@@ -85,29 +217,83 @@
                                 <form>
                                     <div class="form-group">
                                         <label for="fromWithdraw">From</label>
-                                        <input type="text" class="form-control" id="fromWithdraw"
-                                            aria-describedby="EthereumAddressHelp" placeholder="Enter Ethereum Address">
-                                            
+                                        <input type="text" class="form-control" id="fromWithdraw" name="fromWithdraw"
+                                            placeholder="Enter Ethereum Address">
                                     </div>
                                     <label for="fromWithdraw">Amount</label>
-                                    <input type="number" class="form-control"
-                                            aria-describedby="EthereumAddressHelp" placeholder="Enter Amount">
+                                    <input id="withdrawAmount" name="withdrawAmount" type="number" class="form-control"
+                                        placeholder="Enter Amount">
                                     <small class="form-text text-muted QRCode">
                                         <img src="images/qr-code-scan.png" alt="QR Icon">
                                         OR SCAN QR CODE</small>
-                                        <button type="button" id="b2" class="btn btn-primary mt-2">Send</button>
-                                        <script>
-                                            document.getElementById("b2").addEventListener("click", function () {
+                                    <button type="button" id="b2" class="btn btn-primary mt-2">Send</button>
+                                    <script>
+                                        var withdrawAmountInput;
+                                        var WithdrawAmount = 0;
+                                        var fromWithdraw = "";
+                                        document.getElementById("b2").addEventListener("click", function () {
+                                            var els = document.getElementsByName("withdrawAmount");
+                                            for (i = 0; i < els.length; i++) {
+                                                if (els[i].value != 0) {
+                                                    withdrawAmountInput = els[i];
+                                                    WithdrawAmount = els[i].value;
+                                                }
+                                            }
+
+                                            els = document.getElementsByName("fromWithdraw");
+                                            for (i = 0; i < els.length; i++) {
+                                                if (els[i].value != "") {
+                                                    fromWithdraw = els[i].value;
+                                                }
+                                            }
+
+                                            if (fromWithdraw == "") {
+                                                Swal.fire("Cancelled", "Invalid Withdrawal Address!");
+                                            }
+                                            else if (WithdrawAmount == 0) {
+                                                Swal.fire("Cancelled", "Please enter a valid amount!");
+                                            }
+                                            else {
                                                 Swal.fire({
-                                                    position: 'center',
-                                                    icon: 'success',
-                                                    title: 'Withdrawal Successful',
-                                                    text: "Updated Balance: 500 ETH",                                                
-                                                    showConfirmButton: true,
-                                                    
+                                                    title: "Are you sure you want to make this withdrawal?",
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonText: "Yes",
+                                                    confirmButtonColor: "#3da614",
+                                                    cancelButtonText: "No",
+                                                    cancelButtonColor: "#d33",
+                                                    reverseButtons: false,
                                                 })
-                                            });
-                                        </script>                                       
+                                                    .then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            if (login) {
+                                                                if (accountBalance - WithdrawAmount < 0) {
+                                                                    Swal.fire("Cancelled", "Insufficient funds!");
+                                                                }
+                                                                else {
+                                                                    Swal.fire(
+                                                                        "Success!",
+                                                                        "Your new Balance: " + (accountBalance -= WithdrawAmount) + " ETH",
+                                                                        "success"
+                                                                    );
+                                                                    withdrawAmountInput.value = "";
+                                                                    document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
+                                                                }
+                                                            }
+                                                            else {
+                                                                Swal.fire("Success!");
+                                                                withdrawAmountInput.value = "";
+                                                            }
+                                                        } else if (
+                                                            /* Read more about handling dismissals below */
+                                                            result.dismiss === Swal.DismissReason.cancel
+                                                        ) {
+                                                            Swal.fire("Cancelled", "Transaction cancelled");
+                                                        }
+                                                    });
+                                            }
+                                        });
+                                    </script>
                                 </form>
                             </div>
                         </div>
@@ -123,34 +309,111 @@
                                 <form>
                                     <div class="form-group">
                                         <label for="newContractProvider">Provider</label>
-                                        <input type="text" class="form-control" id="newContractProvider"
-                                            aria-describedby="EthereumAddressHelp" placeholder="Enter Ethereum Address">
+                                        <input type="text" class="form-control" id="newContractProvider" name="newContractProvider"
+                                            name="newContractProvider" placeholder="Enter Ethereum Address">
                                     </div>
                                     <div class="form-group">
                                         <label for="newContractSpender">Spender</label>
-                                        <input type="text" class="form-control" id="newContractSpender"
+                                        <input type="text" class="form-control" id="newContractSpender" name="newContractSpender"
                                             placeholder="Enter Ethereum Address">
                                     </div>
                                     <div class="form-group">
-                                        <label for="newContractSpender">Contract Amount</label>
-                                        <input type="number" class="form-control" 
-                                            placeholder="Enter Amount">
+                                        <label for="allowanceSpender">Allowance Amount</label>
+                                        <input id="newAllowanceAmount" name="newAllowanceAmount" type="number"
+                                            class="form-control" placeholder="Enter Amount">
                                     </div>
                                     <small class="form-text text-muted QRCode">
                                         <img src="images/qr-code-scan.png" alt="QR Icon">
                                         OR SCAN QR CODE</small>
-                                        <button type="button" id="b3" class="btn btn-primary mt-2">Send</button>
-                                        <script>
-                                            document.getElementById("b3").addEventListener("click", function () {
+                                    <button type="button" id="b3" class="btn btn-primary mt-2">Send</button>
+                                    <script>
+                                        var newAllowanceAmount = 0;
+                                        var newAllowanceAmountInput;
+                                        var providerAddress = "";
+                                        var spenderAddress = "";
+                                        document.getElementById("b3").addEventListener("click", function () {
+                                            var els = document.getElementsByName("newAllowanceAmount");
+                                            for (i = 0; i < els.length; i++) {
+                                                if (els[i].value != 0) {
+                                                    newAllowanceAmountInput = els[i];
+                                                    newAllowanceAmount = els[i].value;
+                                                }
+                                            }
+
+                                            els = document.getElementsByName("newContractProvider");
+                                            for (i = 0; i < els.length; i++) {
+                                                if (els[i].value != "") {
+                                                    providerAddress = els[i].value;
+                                                }
+                                            }
+
+                                            els = document.getElementsByName("newContractSpender");
+                                            for (i = 0; i < els.length; i++) {
+                                                if (els[i].value != "") {
+                                                    spenderAddress = els[i].value;
+                                                }
+                                            }
+
+                                            if (providerAddress == "") {
+                                                Swal.fire("Cancelled", "Invalid Provider Address!");
+                                            }
+                                            else if (spenderAddress == "") {
+                                                Swal.fire("Cancelled", "Invalid Spender Address!");
+                                            }
+                                            else if (newAllowanceAmount == 0) {
+                                                Swal.fire("Cancelled", "Please enter a valid amount!");
+                                            }
+                                            else {
                                                 Swal.fire({
-                                                    position: 'center',
-                                                    icon: 'success',
-                                                    title: 'Contract has been sent',                                                                                                    
-                                                    showConfirmButton: true,
-                                                    
+                                                    title: "Are you sure you want to set this allowance?",
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonText: "Yes",
+                                                    confirmButtonColor: "#3da614",
+                                                    cancelButtonText: "No",
+                                                    cancelButtonColor: "#d33",
+                                                    reverseButtons: false,
                                                 })
-                                            });
-                                        </script>       
+                                                    .then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            if (login) {
+                                                                if (accountBalance - newAllowanceAmount < 0) {
+                                                                    Swal.fire({
+                                                                        title: "Warning, allowance 'amount' is larger than current balance! are you sure you wish to proceed?",
+                                                                        icon: "warning",
+                                                                        showCancelButton: true,
+                                                                        confirmButtonText: "Yes",
+                                                                        confirmButtonColor: "#3da614",
+                                                                        cancelButtonText: "No",
+                                                                        cancelButtonColor: "#d33",
+                                                                        reverseButtons: false,
+                                                                    })
+                                                                        .then((result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                Swal.fire(
+                                                                                    "Success!"
+                                                                                );
+                                                                            }
+                                                                        });
+                                                                }
+                                                                else {
+                                                                    Swal.fire("Success!");
+                                                                    newAllowanceAmountInput.value = "";
+                                                                }
+                                                            } else {
+                                                                Swal.fire("Success!");
+                                                                newAllowanceAmountInput.value = "";
+                                                            }
+                                                        } else if (
+                                                            /* Read more about handling dismissals below */
+                                                            result.dismiss === Swal.DismissReason.cancel
+                                                        ) {
+                                                            Swal.fire("Cancelled", "Transaction cancelled");
+                                                        }
+                                                    });
+                                            }
+                                        });
+                                    </script>
                                 </form>
                             </div>
                         </div>
@@ -168,14 +431,14 @@
         </div>
     </main>
     <footer class="container">
-        <p>&copy; 2021 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></a> &middot; <a href="./pages/attributions.html">Attributions</a></p>
+        <p>&copy; 2021 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></a> &middot; <a
+                href="./pages/attributions.html">Attributions</a></p>
     </footer>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="JS/index.js"></script>
 </body>
 
 </html>
-
