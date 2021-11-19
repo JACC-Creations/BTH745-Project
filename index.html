@@ -266,29 +266,60 @@
                                                 })
                                                     .then((result) => {
                                                         if (result.isConfirmed) {
-                                                            if (login) {
-                                                                if (accountBalance - WithdrawAmount < 0) {
-                                                                    Swal.fire("Cancelled", "Insufficient funds!");
+                                                            Swal.fire({
+                                                                title: 'Choose Bank',
+                                                                html:
+                                                                    '<input type="text" id="transit" class="swal2-input" placeholder="12345">' +
+                                                                    '<input type="text" id="institution" class="swal2-input" placeholder="678">' +
+                                                                    '<input type="text" id="account" class="swal2-input" placeholder="0123456">',
+                                                                showCancelButton: true,
+                                                                confirmButtonText: 'Withdraw',
+                                                                confirmButtonColor: "#3da614",
+                                                                cancelButtonText: "Cancel",
+                                                                cancelButtonColor: "#d33",
+                                                                focusConfirm: false,
+                                                                preConfirm: () => {
+                                                                    const transit = Swal.getPopup().querySelector('#transit').value
+                                                                    const institution = Swal.getPopup().querySelector('#institution').value
+                                                                    const account = Swal.getPopup().querySelector('#account').value
+                                                                    if (transit.length != 5 || institution.length != 3 || account.length != 7) {
+                                                                        Swal.showValidationMessage(`Invalid bank info!`)
+                                                                    }
+                                                                    return { transit: transit, institution: institution, account: account }
                                                                 }
-                                                                else {
-                                                                    Swal.fire(
-                                                                        "Success!",
-                                                                        "Your new Balance: " + (accountBalance -= WithdrawAmount) + " ETH",
-                                                                        "success"
-                                                                    );
-                                                                    withdrawAmountInput.value = "";
-                                                                    document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    if (login) {
+                                                                        if (accountBalance - WithdrawAmount < 0) {
+                                                                            Swal.fire("Cancelled", "Insufficient funds!");
+                                                                        }
+                                                                        else {
+                                                                            Swal.fire(
+                                                                                "Success!",
+                                                                                "Your new Balance: " + (accountBalance -= WithdrawAmount) + " ETH",
+                                                                                "success"
+                                                                            );
+                                                                            withdrawAmountInput.value = "";
+                                                                            document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        Swal.fire("Success!");
+                                                                        withdrawAmountInput.value = "";
+                                                                    }
                                                                 }
-                                                            }
-                                                            else {
-                                                                Swal.fire("Success!");
-                                                                withdrawAmountInput.value = "";
-                                                            }
+                                                                else if (
+                                                                    /* Read more about handling dismissals below */
+                                                                    result.dismiss === Swal.DismissReason.cancel
+                                                                ) {
+                                                                    Swal.fire("Cancelled", "Withdrawal cancelled");
+                                                                }
+                                                            })
                                                         } else if (
                                                             /* Read more about handling dismissals below */
                                                             result.dismiss === Swal.DismissReason.cancel
                                                         ) {
-                                                            Swal.fire("Cancelled", "Transaction cancelled");
+                                                            Swal.fire("Cancelled", "Withdrawal cancelled");
                                                         }
                                                     });
                                             }
@@ -309,13 +340,14 @@
                                 <form>
                                     <div class="form-group">
                                         <label for="newContractProvider">Provider</label>
-                                        <input type="text" class="form-control" id="newContractProvider" name="newContractProvider"
-                                            name="newContractProvider" placeholder="Enter Ethereum Address">
+                                        <input type="text" class="form-control" id="newContractProvider"
+                                            name="newContractProvider" name="newContractProvider"
+                                            placeholder="Enter Ethereum Address">
                                     </div>
                                     <div class="form-group">
                                         <label for="newContractSpender">Spender</label>
-                                        <input type="text" class="form-control" id="newContractSpender" name="newContractSpender"
-                                            placeholder="Enter Ethereum Address">
+                                        <input type="text" class="form-control" id="newContractSpender"
+                                            name="newContractSpender" placeholder="Enter Ethereum Address">
                                     </div>
                                     <div class="form-group">
                                         <label for="allowanceSpender">Allowance Amount</label>
