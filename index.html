@@ -4,107 +4,108 @@
 <head>
     <meta charset="UTF-8">
     <title>BTH745-Adv. Prototype</title>
-    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css'>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <div class="container-fluid">
+            <div class="container">
                 <a class="navbar-brand" href="#">BTH745-Group 2</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item px-2">
-                            <button id="login" class="btn btn-primary">Login</button>
-                            <button id="logout" class="btn btn-primary" hidden>Logout</button>
-                            <script>
-                                var loginFunc = function () {
-                                    Swal.fire({
-                                        title: 'Login Form',
-                                        html:
-                                            '<input type="text" id="login" class="swal2-input" placeholder="Username">' +
-                                            '<input type="password" id="password" class="swal2-input" placeholder="Password">',
-                                        confirmButtonText: 'Sign in',
-                                        focusConfirm: false,
-                                        preConfirm: () => {
-                                            const login = Swal.getPopup().querySelector('#login').value
-                                            const password = Swal.getPopup().querySelector('#password').value
-                                            if (!login || !password) {
-                                                Swal.showValidationMessage(`Please enter login and password`)
-                                            }
-                                            return { login: login, password: password }
-                                        }
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            if (result.value.login == username && result.value.password == password) {
-                                                login = true;
-                                                document.getElementById("fromSend").value = address;
-
-                                                var els = document.getElementsByName("fromWithdraw");
-                                                for (i = 0; i < els.length; i++) {
-                                                    els[i].value = address;
-                                                }
-
-                                                var els = document.getElementsByName("newContractProvider");
-                                                for (i = 0; i < els.length; i++) {
-                                                    els[i].value = address;
-                                                }
-
-                                                document.getElementById("login").hidden = true;
-                                                document.getElementById("logout").hidden = false;
-                                                document.getElementById("balance").hidden = false;
-                                                document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
-
-                                                Swal.fire("Success", "Login Successful!");
-                                            }
-                                            else {
-                                                Swal.fire("Error", "Login Failed!");
-                                            }
-                                        }
-                                    })
-                                }
-
-                                var logoutFunc = function () {
-                                    login = false;
-
-                                    document.getElementById("fromSend").value = "";
-
-                                    var els = document.getElementsByName("fromWithdraw");
-                                    for (i = 0; i < els.length; i++) {
-                                        els[i].value = "";
-                                    }
-
-                                    var els = document.getElementsByName("newContractProvider");
-                                    for (i = 0; i < els.length; i++) {
-                                        els[i].value = "";
-                                    }
-
-                                    document.getElementById("logout").hidden = true;
-                                    document.getElementById("login").hidden = false;
-                                    document.getElementById("balance").hidden = true;
-                                    document.getElementById("balance").innerText = ``;
-
-                                    Swal.fire("Success", "Logged Out!");
-                                }
-
-                                document.getElementById("login").addEventListener("click", loginFunc);
-                                document.getElementById("logout").addEventListener("click", logoutFunc);
-                            </script>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a href="#" data-target="#carousel-1" data-slide-to="0" class="nav-link">Send</a>
                         </li>
-                        <li class="nav-item px-2">
-                            <a href="https://etherscan.io/login" class="btn btn-primary">Metis</a>
+                        <li class="nav-item">
+                            <a href="#" data-target="#carousel-1" data-slide-to="1" class="nav-link">Withdraw</a>
                         </li>
-                        <li class="nav-item px-2">
-                            <a href="https://metamask.io/" class="btn btn-primary">Activate Metamask</a>
-                        </li>
-                        <li class="nav-item px-2">
-                            <h2 id="balance" class="navbar-brand" hidden></h2>
+                        <li class="nav-item">
+                            <a href="#" data-target="#carousel-1" data-slide-to="2" class="nav-link">Set Allowance</a>
                         </li>
                     </ul>
+                    <div class="nav-item">
+                        <h2 id="balance" class="navbar-brand" hidden></h2>
+                        <button id="login" class="btn btn-primary">Login</button>
+                        <button id="logout" class="btn btn-primary" hidden>Logout</button>
+                        <script>
+                            var loginFunc = function () {
+                                Swal.fire({
+                                    title: 'Login Form',
+                                    html:
+                                        '<input type="text" id="login" class="swal2-input" placeholder="Username">' +
+                                        '<input type="password" id="password" class="swal2-input" placeholder="Password">',
+                                    confirmButtonText: 'Sign in',
+                                    focusConfirm: false,
+                                    preConfirm: () => {
+                                        const login = Swal.getPopup().querySelector('#login').value
+                                        const password = Swal.getPopup().querySelector('#password').value
+                                        if (!login || !password) {
+                                            Swal.showValidationMessage(`Please enter login and password`)
+                                        }
+                                        return { login: login, password: password }
+                                    }
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        if (result.value.login == username && result.value.password == password) {
+                                            login = true;
+                                            document.getElementById("fromSend").value = address;
+
+                                            var els = document.getElementsByName("fromWithdraw");
+                                            for (i = 0; i < els.length; i++) {
+                                                els[i].value = address;
+                                            }
+
+                                            var els = document.getElementsByName("newContractProvider");
+                                            for (i = 0; i < els.length; i++) {
+                                                els[i].value = address;
+                                            }
+
+                                            document.getElementById("login").hidden = true;
+                                            document.getElementById("logout").hidden = false;
+                                            document.getElementById("balance").hidden = false;
+                                            document.getElementById("balance").innerText = `Balance: ${accountBalance}`;
+
+                                            Swal.fire("Success", "Login Successful!");
+                                        }
+                                        else {
+                                            Swal.fire("Error", "Login Failed!");
+                                        }
+                                    }
+                                })
+                            }
+
+                            var logoutFunc = function () {
+                                login = false;
+
+                                document.getElementById("fromSend").value = "";
+
+                                var els = document.getElementsByName("fromWithdraw");
+                                for (i = 0; i < els.length; i++) {
+                                    els[i].value = "";
+                                }
+
+                                var els = document.getElementsByName("newContractProvider");
+                                for (i = 0; i < els.length; i++) {
+                                    els[i].value = "";
+                                }
+
+                                document.getElementById("logout").hidden = true;
+                                document.getElementById("login").hidden = false;
+                                document.getElementById("balance").hidden = true;
+                                document.getElementById("balance").innerText = ``;
+
+                                Swal.fire("Success", "Logged Out!");
+                            }
+
+                            document.getElementById("login").addEventListener("click", loginFunc);
+                            document.getElementById("logout").addEventListener("click", logoutFunc);
+                        </script>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -467,11 +468,11 @@
         <p>&copy; 2021 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></a> &middot; <a
                 href="./pages/attributions.html">Attributions</a></p>
     </footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="JS/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./JS/index.js"></script>
 </body>
 
 </html>
